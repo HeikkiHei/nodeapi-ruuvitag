@@ -4,8 +4,8 @@
   "description": "Node.js API for communicating with RuuviTag BLE Sensor Beacon and decoding data to JSON",
   "main": "index.js",
   "scripts": {
-    "start": "sudo node index.js",
-    "dev": "sudo nodemon --exec 'node index.js -v'",
+    "start": "node index.js -v",
+    "dev": "nodemon --exec 'node index.js -v'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "JHu",
