@@ -50,7 +50,6 @@ const decodeDF5 = (rawData) => {
 
   const measurementsequencenumber = (rawSeqnum) => rawSeqnum != 0xFFFF ? rawSeqnum : undefined
   
-  
 
   if (rawData.length === 52) {
 

@@ -8,7 +8,10 @@ const cors = require('cors')
 app.use(express.json())
 app.use(cors())
 
+// Original data parser:
 // const sensorData = require('./sensorData')
+
+// Modified for our data type
 const sensorData = require('./parseData')
 
 const verbose = (process.argv[2] == '-v' || process.argv[2] == '-V')
