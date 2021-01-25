@@ -49,6 +49,8 @@ const decodeDF5 = (rawData) => {
   const movementcounter = (rawMovecount) => rawMovecount != 0xFF ? rawMovecount : undefined
 
   const measurementsequencenumber = (rawSeqnum) => rawSeqnum != 0xFFFF ? rawSeqnum : undefined
+  
+  
 
   if (rawData.length === 52) {
 
@@ -58,22 +60,30 @@ const decodeDF5 = (rawData) => {
       const acc_x = acceleration(parseInt(rawData.substring(18, 22), 16))
       const acc_y = acceleration(parseInt(rawData.substring(22, 26), 16))
       const acc_z = acceleration(parseInt(rawData.substring(26, 30), 16))
+      
+      // parse mac address
+      const macAddress = rawData.substring(40).match(/.{1,2}/g).join(':').toUpperCase()
 
       return {
-        'format': format,
-        'temp': temperature(parseInt(rawData.substring(6, 10), 16)),
+        'accelX': acc_x,
+        'accelY': acc_y,
+        'accelZ': acc_z,
+        'connectable': false,
+        'createDate': new Date().toISOString(),
+        'dataFormat': format,
+        'defaultBackground': 4,
+        'favorite': true,
         'humidity': humidity(parseInt(rawData.substring(10, 14), 16)),
+        'humidityOffset': 0,
+        'id': macAddress,
+        'measurementSequenceNumber': measurementsequencenumber(parseInt(rawData.substring(36, 40), 16)),
+        'movementCounter': movementcounter(parseInt(rawData.substring(34, 36), 16)),
+        'name': '',
         'pressure': pressure(parseInt(rawData.substring(14, 18), 16)),
-        'acceleration': Math.round(Math.sqrt(acc_x * acc_x + acc_y * acc_y + acc_z * acc_z) * 1000) / 1000,
-        'accererations': {
-          'x': acc_x,
-          'y': acc_y,
-          'z': acc_z
-        },
-        'voltage': voltage(parseInt(rawData.substring(30, 34), 16)),
-        'txpower': txpower(parseInt(rawData.substring(30, 34), 16)),
-        'movementcount': movementcounter(parseInt(rawData.substring(34, 36), 16)),
-        'measurementseqcount': measurementsequencenumber(parseInt(rawData.substring(36, 40), 16))
+        'temperature': temperature(parseInt(rawData.substring(6, 10), 16)),
+        'txPower': txpower(parseInt(rawData.substring(30, 34), 16)),
+        'updateAt': new Date().toISOString(),
+        'voltage': voltage(parseInt(rawData.substring(30, 34), 16))
       }
     }
   }

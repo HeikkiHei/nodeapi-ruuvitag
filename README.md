@@ -20,13 +20,21 @@ $ npm install
 ### Usage
 Run the application server with the following command and then go to address: http://localhost:3001
 ```sh
+$ node index.js
+```
+
+If you run into problems with permissions, try
+
+```sh
 $ sudo node index.js
 ```
 
 Also print the data to the console using command
 ```sh
-$ sudo node index.js -v
+$ node index.js -v
 ```
+
+Same notation for permissions applies here.
 
 #### Data Formats
 * Example JSON for Data Format 5 (RAWv2). Data Format 3 (RAWv1) doesn't contain txpower, movementcount and measurementseqcount. 

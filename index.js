@@ -1,6 +1,12 @@
 const noble = require('@abandonware/noble')
-const dateFormat = require('dateformat')
-const http = require('http')
+// const dateFormat = require('dateformat')
+const express = require('express')
+const app = express()
+const axios = require('axios')
+const cors = require('cors')
+
+app.use(express.json())
+app.use(cors())
 
 // const sensorData = require('./sensorData')
 const sensorData = require('./parseData')
@@ -23,7 +29,6 @@ noble.on('stateChange', (state) => {
 })
 
 noble.on('discover', (peripheral) => {
-
     if (peripheral.advertisement.manufacturerData) {
 
         const rawData = peripheral.advertisement.manufacturerData.toString('hex')
@@ -31,29 +36,24 @@ noble.on('discover', (peripheral) => {
         if (rawData.length >= 4) {
             if (rawData.substring(0, 4) == '9904') {
 
-                //Sensor data..
+                //Sensor data...
                 const sensor = {
-                    'id': peripheral.id,
-                    'address': peripheral.address,
-                    'rssi': peripheral.rssi,
-                    'timestamp': dateFormat(Date(), 'dd.mm.yyyy HH:MM:ss'),
-                    'rawdata': rawData,
-                    'data': sensorData.decode(rawData)
+                    'eventId': peripheral.id,
+                    'deviceId': peripheral.address,
+                    'time': new Date().toISOString(),
+                    'batteryLevel': 0,
+                    'tags': [sensorData.decode(rawData)]
                 }
-                    console.log('SENSOR', sensor)
-                
-                
+                sensor.tags.rssi = peripheral.rssi
 
-                //Add or update
-                const index = sensors.findIndex(x => x.id === sensor.id)
-                if (index == -1) {
-                    //Add new
-                    sensors.push(sensor)
-                } else {
-                    //Update existing
-                    sensors[index] = sensor
-                }
+                // Send data to server
+                axios
+                    .post('https://ruuvi-backend.herokuapp.com/api/ruuvis', sensor)
+                    .then(response =>
+                        console.log(response))
+                    .catch(error => console.log(sensor, error.toJSON()))
 
+                // If verbose...
                 if (verbose) {
                     console.clear()
                     console.log('Sensors:\n')
@@ -71,11 +71,8 @@ process.on('SIGINT', () => {
     process.exit(1)
 })
 
-const app = http.createServer((request, response) => {
-    response.writeHead(200, { 'Content-Type': 'application/json' })
-    response.end(JSON.stringify(sensors))
-})
 
-const port = 3001
-app.listen(port)
-console.log(`\nhttp server running on port: ${port}`)
+const PORT = 3001
+app.listen(PORT, () => {
+    console.log(`\nServer running on port: ${PORT}`)
+})
