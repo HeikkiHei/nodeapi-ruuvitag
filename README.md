@@ -37,33 +37,36 @@ $ node index.js -v
 Same notation for permissions applies here.
 
 #### Data Formats
-* Example JSON for Data Format 5 (RAWv2). Data Format 3 (RAWv1) doesn't contain txpower, movementcount and measurementseqcount. 
+* Example JSON for Data Format 5 (RAWv2), and with extended hardcoded values to match that of the Ruuvi Station gateway:
 ```json
-[
+"tags": [
     {
-        id: "ea7fb5add1ca",
-        address: "ea:7f:b5:ad:d1:ca",
-        rssi: -57,
-        timestamp: "29.03.2020 20:39:24",
-        rawdata: "99040511522160c53b0000ffcc03e4c5b63e696cea7fb5adb1da",
-        data: {
-            format: 5,
-            temp: 22.17,
-            humidity: 21.36,
-            pressure: 1004.91,
-            acceleration: 0.997,
-            accererations: {
-                x: 0,
-                y: -0.052,
-                z: 0.996
-            },
-            voltage: 3.181,
-            txpower: 4,
-            movementcount: 62,
-            measurementseqcount: 26988
-        }
+    "accelX": "Number",
+    "accelY": "Number",
+    "accelZ": "Number",
+    "connectable": "Boolean",
+    "createDate": "Date",
+    "dataFormat": "Number",
+    "defaultBackground": "Number",
+    "favorite": "Boolean",
+    "humidity": "Number",
+    "humidityOffset": "Number",
+    "id": "String",
+    "measurementSequenceNumber": "Number",
+    "movementCounter": "Number",
+    "name": "String",
+    "pressure": "Number",
+    "rssi": "Number",
+    "temperature": "Number",
+    "txPower": "Number",
+    "updateAt": "String",
+    "voltage": "Number"
     }
-]
+],
+"batteryLevel": "Number",
+"deviceId": "String",
+"eventId": "String",
+"time": "String"
 ```
 
 ## License
