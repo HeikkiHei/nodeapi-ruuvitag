@@ -16,8 +16,6 @@ const sensorData = require('./parseData')
 
 const verbose = (process.argv[2] == '-v' || process.argv[2] == '-V')
 
-const sensors = []
-
 noble.on('stateChange', (state) => {
     if (state === 'poweredOn') {
         noble.startScanning([], true)
@@ -48,6 +46,7 @@ noble.on('discover', (peripheral) => {
                     'tags': [sensorData.decode(rawData)]
                 }
                 sensor.tags.rssi = peripheral.rssi
+                
 
                 // Send data to server
                 axios
@@ -55,14 +54,6 @@ noble.on('discover', (peripheral) => {
                     .then(response =>
                         console.log(response))
                     .catch(error => console.log(sensor, error.toJSON()))
-
-                // If verbose...
-                if (verbose) {
-                    console.clear()
-                    console.log('Sensors:\n')
-                    console.log(sensors)
-                    console.log()
-                }
             }
         }
     }
@@ -77,5 +68,5 @@ process.on('SIGINT', () => {
 
 const PORT = 3001
 app.listen(PORT, () => {
-    console.log(`\nServer running on port: ${PORT}`)
+    console.log(`\nGateway running on port: ${PORT}`)
 })
